@@ -20,6 +20,7 @@ export default {
         { title: "DC Heroes", to: "/dc-heros" },
         { title: "Calendar", to: "/calendar" },
         { title: "Markdown", to: "/markdown" },
+        { title: "Slider", to: "/slider" },
       ],
     };
   },
