@@ -16,6 +16,7 @@
         class="border rounded"
         v-model.lazy.trim="newHero"
         placeholder="Type Hero Name Here"
+        ref="newHeroRef"
       />
       <button
         class="border rounded bg-gradient-to-l from-blue-700 to-gray-300 text-sm text-gray-100"
@@ -40,6 +41,9 @@ export default {
         { name: "Superman" },
       ],
     };
+  },
+  mounted() {
+    this.$refs.newHeroRef.focus();
   },
   computed: {
     herosCount() {
