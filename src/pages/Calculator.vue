@@ -164,7 +164,7 @@ export default {
       currentNum.value = +prevNum.value + +currentNum.value;
     }
 
-    const clear = (params) => (currentNum.value = "");
+    const clear = () => (currentNum.value = "");
 
     const handleKeydown = (e) => pressed(e.key);
 
