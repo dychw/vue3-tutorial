@@ -29,37 +29,38 @@
 </template>
 
 <script>
+import { onMounted, ref, computed } from "vue";
 export default {
-  data() {
-    return {
-      newHero: "",
-      dcHeros: [
-        { name: "SuperGirl" },
-        { name: "Flash" },
-        { name: "Arrow" },
-        { name: "Batman" },
-        { name: "Superman" },
-      ],
-    };
-  },
-  mounted() {
-    this.$refs.newHeroRef.focus();
-  },
-  computed: {
-    herosCount() {
-      return this.dcHeros.length;
-    },
-  },
-  methods: {
-    addHero() {
-      if (this.newHero !== "") {
-        this.dcHeros.push({ name: this.newHero });
-        this.newHero = "";
+  setup() {
+    const newHeroRef = ref("");
+    const newHero = ref("");
+    const dcHeros = ref([
+      { name: "SuperGirl" },
+      { name: "Flash" },
+      { name: "Arrow" },
+      { name: "Batman" },
+      { name: "Superman" },
+    ]);
+    const herosCount = computed({
+      get: () => dcHeros.value.length,
+    });
+
+    onMounted(() => {
+      newHeroRef.value.focus();
+    });
+
+    function remove(index) {
+      dcHeros.value = dcHeros.value.filter((hero, i) => i !== index);
+    }
+
+    function addHero() {
+      if (newHero.value !== "") {
+        dcHeros.value.push({ name: newHero.value });
+        newHero.value = "";
       }
-    },
-    remove(index) {
-      this.dcHeros = this.dcHeros.filter((hero, i) => i !== index);
-    },
+    }
+
+    return { dcHeros, newHero, remove, addHero, newHeroRef, herosCount };
   },
 };
 </script>
