@@ -9,7 +9,7 @@
       :to="item.to"
       >{{ item.title }}</router-link
     >
-    <button v-if="isLoggedInP" class="mx-2" @click="logout">Logout</button>
+    <button v-if="isLoggedIn" class="mx-2" @click="logout">Logout</button>
     <button v-else class="mx-2" @click="$emit('open-login-model')">
       Login
     </button>
@@ -19,7 +19,6 @@
 <script>
 import firebase from "../utilities/firebase";
 export default {
-  props: { isLoggedInP: Boolean },
   data() {
     return {
       list: [
@@ -32,6 +31,11 @@ export default {
         { title: "Chat", to: "/chat" },
       ],
     };
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.state.isLoggedIn;
+    },
   },
   methods: {
     logout() {
