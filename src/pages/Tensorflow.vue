@@ -12,13 +12,20 @@
             >
               Open Camera
             </button>
-            <button
-              v-else
-              @click="stopStreaming"
-              class="w-32 rounded shadow-md bg-gradient-to-r from-red-800 to-pink-600 text-white px-2 py-1"
-            >
-              Stop Streaming
-            </button>
+            <div v-else class="flex justify-between">
+              <button
+                @click="stopStreaming"
+                class="w-32 rounded shadow-md bg-gradient-to-r from-red-800 to-pink-600 text-white px-2 py-1"
+              >
+                Stop Streaming
+              </button>
+              <button
+                @click="snapshot"
+                class="w-32 rounded shadow-md bg-gradient-to-r from-red-800 to-pink-600 text-white px-2 py-1"
+              >
+                Snapshot
+              </button>
+            </div>
           </div>
           <video ref="videoRef" autoplay="true" width="100"></video>
         </div>
@@ -82,6 +89,15 @@ export default {
       const stream = videoRef.value.srcObject;
       const tracks = stream.getTracks();
       tracks.map((track) => track.stop());
+      isStreaming.value = false;
+    }
+
+    function snapshot() {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(videoRef.value, 0, 0, 200, 200);
+      const data = canvas.toDataURL("image/png");
+      imgRef.value.setAttribute("src", data);
     }
 
     return {
@@ -93,6 +109,7 @@ export default {
       videoRef,
       isStreaming,
       stopStreaming,
+      snapshot,
     };
   },
 };
