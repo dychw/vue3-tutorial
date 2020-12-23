@@ -2,34 +2,42 @@
   <section class="flex w-full">
     <div class="m-auto">
       <div class="mt-10">
+        <Create @newUserAdded="addUser" />
         <table>
           <thead>
             <tr>
               <th class="border px-4 py-2">ID</th>
               <th class="border px-4 py-2">Avatar</th>
-              <th class="border px-4 py-2">First Name</th>
-              <th class="border px-4 py-2">Last Name</th>
+              <th class="border px-4 py-2">Name</th>
               <th class="border px-4 py-2">Email</th>
+              <td class="border px-4 py-2">Actions</td>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in state.users.data" :key="user.id">
-              <td class="border px-4 py-2">{{ user.id }}</td>
+            <tr v-for="user in state.users" :key="user._id">
+              <td class="border px-4 py-2">{{ user._id }}</td>
               <td class="border px-4 py-2">
                 <img
                   :src="user.avatar"
-                  :alt="user.first_name"
+                  :alt="user.name"
                   width="50"
                   class="rounded-full"
                 />
               </td>
-              <td class="border px-4 py-2">{{ user.first_name }}</td>
-              <td class="border px-4 py-2">{{ user.last_name }}</td>
+              <td class="border px-4 py-2">{{ user.name }}</td>
               <td class="border px-4 py-2">{{ user.email }}</td>
+              <td class="border px-4 py-2">
+                <button
+                  class="px-2 py-1 bg-red-800 rounded text-white"
+                  @click="destroy(user._id)"
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
-        <div class="flex justify-between">
+        <!-- <div class="flex justify-between">
           <button
             class="px-3 py-2 border rounded shadow"
             @click="prev"
@@ -50,7 +58,7 @@
           >
             Next
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
   </section>
@@ -59,27 +67,39 @@
 <script>
 import { onMounted, reactive } from "vue";
 import axios from "../plugins/axios";
+import Create from "../components/UserCrud/Create";
 
 export default {
+  components: { Create },
   setup() {
-    const state = reactive({ users: [] });
+    const state = reactive({
+      users: [],
+    });
 
     onMounted(async () => {
-      const { data } = await axios.get("/api/users");
+      const { data } = await axios.get("/users");
       state.users = data;
     });
 
-    async function next() {
-      const { data } = await axios.get("/api/users?page=2");
-      state.users = data;
+    // async function next() {
+    //   const { data } = await axios.get("/users?page=2");
+    //   state.users = data;
+    // }
+
+    // async function prev() {
+    //   const { data } = await axios.get("/users?page=1");
+    //   state.users = data;
+    // }
+
+    async function destroy(id) {
+      await axios.delete(`/users/${id}`);
     }
 
-    async function prev() {
-      const { data } = await axios.get("/api/users?page=1");
-      state.users = data;
+    function addUser(data) {
+      state.users.push(data);
     }
 
-    return { state, next, prev };
+    return { state, destroy, addUser };
   },
 };
 </script>
